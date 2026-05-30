@@ -10,7 +10,7 @@ average = total / 5
 percentage = (total / 500) * 100
 print("your Percentage is:", percentage)
 
-if percentage >= 75:
+if percentage >= 90:
     print("REsult: Distinction")
 elif percentage >= 60:
     print("Result: First Class")
