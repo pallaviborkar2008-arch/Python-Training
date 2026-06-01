@@ -29,7 +29,7 @@ for mark in marks:
 def greet(name):
     print(f"Hello, {name}! welcome to Python class!")
 
-    
+     
   
 for student in students:
         greet(student)
