@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Student Quiz Hub{% endblock %}
+
+{% block content %}
+
+   <h1>📚 Student Quiz Records</h1>
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Attempts</th>
+            <th>Status</th>
+        </tr>
+
+        {% for student in quiz_records %}
+        <tr>
+            <td>{{ student.name }}</td>
+            <td>{{ student.score }}</td>
+            <td>{{ student.attempts }}</td>
+            <td>{{ get_status(student.score) }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    <br>
+
+    <h3>Total Students: {{ total_quizzes }}</h3>
+
+    <p>
+        <a href="{{ url_for('home') }}">Home</a> |
+        <a href="{{ url_for('subjects') }}">Subjects</a> |
+        <a href="{{ url_for('about') }}">About</a>
+    </p>
+
+</body>
+</html>
+{%endblock %}

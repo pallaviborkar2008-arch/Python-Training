@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Student Quiz Hub{% endblock %}
+
+{% block content %}
+
+    <h1>📚 Available Subjects</h1>
+
+    <p><b>Instructions:</b> Use this app to explore different subjects,
+        practice quiz questions, improve your knowledge, and track your learning progress.
+        Select a subject below and answer the questions provided.</p>
+
+    <ul>
+        {% for subject in subjects %}
+            <li>{{ subject }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Sample Questions</h2>
+
+    <p><b>C:</b> What is a pointer?</p>
+    <p><b>C++:</b> What is inheritance?</p>
+    <p><b>Java:</b> What is JVM?</p>
+    <p><b>Python:</b> What is a list?</p>
+    <p><b>JavaScript:</b> What is DOM?</p>
+
+    <p>
+        <a href="{{ url_for('home') }}">Home</a> |
+        <a href="{{ url_for('students') }}">Students</a> |
+        <a href="{{ url_for('about') }}">About</a>
+    </p>
+
+</body>
+</html>
+{% endblock %}
