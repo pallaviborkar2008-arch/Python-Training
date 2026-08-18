@@ -1,13 +1,953 @@
-{%extends "base.html" %}
+{% extends "base.html" %}
 
-{% block title %}About - Student quiz hub{% endblock %}
-    
+{% block title %}About | Student Quiz Hub{% endblock %}
+
 {% block content %}
-    <h1>About Student Quiz Hub</h1>
-    <p>Student Quiz Hub is a platform designed to help students test their knowledge and track their progress through quizzes..</p>
-    <p>Our mission is to provide an engaging and interactive way for students to learn and improve their skills across various subjects.</p>
-    <p>Whether you're a student looking to practice or an educator seeking a tool to assess
-    <p><a href="{{url_for("home")}}">Back to Home</a></p>
 
-</p></a></p>    
+<style>
+
+    .about-page {
+        padding-bottom: 50px;
+    }
+
+    /* ================= HERO ================= */
+
+    .about-hero {
+        margin-top: 10px;
+        padding: 45px 40px;
+        border-radius: 28px;
+
+        background:
+            radial-gradient(circle at 90% 20%, #ddd6fe 0%, transparent 35%),
+            radial-gradient(circle at 10% 80%, #bfdbfe 0%, transparent 35%),
+            linear-gradient(135deg, #f5f3ff, #e0e7ff);
+
+        box-shadow: 0 15px 35px rgba(79,70,229,.12);
+    }
+
+    .about-hero h1 {
+        font-size: 43px;
+        font-weight: 800;
+        color: #172554;
+    }
+
+    .about-hero h1 span {
+        background: linear-gradient(90deg,#4f46e5,#2563eb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .about-hero p {
+        color: #64748b;
+        font-size: 17px;
+        line-height: 1.8;
+    }
+
+    .about-visual {
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .about-circle {
+        width: 165px;
+        height: 165px;
+        border-radius: 50%;
+
+        background: linear-gradient(135deg,#c7d2fe,#bfdbfe);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 78px;
+
+        box-shadow: 0 18px 35px rgba(79,70,229,.15);
+    }
+
+    .about-star {
+        position: absolute;
+        top: 10px;
+        right: 30px;
+        font-size: 35px;
+    }
+
+    .about-book {
+        position: absolute;
+        bottom: 5px;
+        left: 30px;
+
+        background: white;
+        padding: 9px 13px;
+        border-radius: 14px;
+        font-size: 28px;
+
+        box-shadow: 0 8px 20px rgba(0,0,0,.10);
+    }
+
+
+    /* ================= SECTION TITLE ================= */
+
+    .section-title {
+        margin-top: 40px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .section-title h2 {
+        color: #172554;
+        font-weight: 800;
+    }
+
+    .section-title p {
+        color: #64748b;
+    }
+
+
+    /* ================= COMMON CARD ================= */
+
+    .about-card {
+        height: 100%;
+        padding: 25px;
+
+        background: rgba(255,255,255,.95);
+
+        border: none;
+        border-radius: 20px;
+
+        box-shadow: 0 10px 25px rgba(30,64,175,.08);
+
+        transition: .3s;
+    }
+
+    .about-card:hover {
+        transform: translateY(-5px);
+
+        box-shadow: 0 16px 30px rgba(30,64,175,.13);
+    }
+
+    .about-card h4 {
+        color: #312e81;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .about-card p {
+        color: #64748b;
+        line-height: 1.7;
+        margin-bottom: 0;
+    }
+
+    .feature-icon {
+        width: 58px;
+        height: 58px;
+
+        border-radius: 16px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #eef2ff;
+
+        font-size: 29px;
+        margin-bottom: 16px;
+    }
+
+
+    /* ================= WHY SECTION ================= */
+
+    .why-box {
+        padding: 30px;
+
+        border-radius: 22px;
+
+        background: linear-gradient(135deg,#eef2ff,#eff6ff);
+
+        box-shadow: 0 10px 25px rgba(30,64,175,.07);
+    }
+
+    .why-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .why-list li {
+        padding: 12px 0;
+
+        color: #475569;
+        font-weight: 600;
+
+        border-bottom: 1px solid #dbeafe;
+    }
+
+    .why-list li:last-child {
+        border-bottom: none;
+    }
+
+
+    /* ================= SUBJECTS ================= */
+
+    .subject-card {
+        text-align: center;
+        padding: 23px 15px;
+
+        background: white;
+
+        border-radius: 18px;
+
+        box-shadow: 0 8px 20px rgba(30,64,175,.08);
+
+        transition: .3s;
+    }
+
+    .subject-card:hover {
+        transform: translateY(-4px);
+        background: #f8f7ff;
+    }
+
+    .subject-card .emoji {
+        font-size: 38px;
+        margin-bottom: 10px;
+    }
+
+    .subject-card h5 {
+        color: #312e81;
+        font-weight: 800;
+        margin: 0;
+    }
+
+
+    /* ================= HOW IT WORKS ================= */
+
+    .step-card {
+        position: relative;
+        text-align: center;
+        padding: 25px 15px;
+
+        background: white;
+
+        border-radius: 20px;
+
+        box-shadow: 0 8px 20px rgba(30,64,175,.08);
+    }
+
+    .step-number {
+        width: 42px;
+        height: 42px;
+
+        margin: 0 auto 15px;
+
+        border-radius: 50%;
+
+        background: linear-gradient(135deg,#4f46e5,#2563eb);
+
+        color: white;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-weight: 800;
+    }
+
+    .step-card .step-icon {
+        font-size: 35px;
+        margin-bottom: 10px;
+    }
+
+    .step-card h5 {
+        color: #312e81;
+        font-weight: 800;
+    }
+
+    .step-card p {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+
+    /* ================= AI SECTION ================= */
+
+    .ai-section {
+        margin-top: 35px;
+        padding: 35px;
+
+        border-radius: 24px;
+
+        background: linear-gradient(135deg,#312e81,#2563eb);
+
+        color: white;
+
+        box-shadow: 0 15px 30px rgba(79,70,229,.20);
+    }
+
+    .ai-section h2 {
+        font-weight: 800;
+    }
+
+    .ai-section p {
+        line-height: 1.8;
+        opacity: .92;
+    }
+
+    .ai-feature {
+        background: rgba(255,255,255,.12);
+        padding: 15px;
+        border-radius: 14px;
+        margin-bottom: 10px;
+    }
+
+
+    /* ================= TECHNOLOGY ================= */
+
+    .tech-section {
+        margin-top: 35px;
+        padding: 30px;
+
+        border-radius: 22px;
+
+        background: linear-gradient(135deg,#eef2ff,#eff6ff);
+
+        box-shadow: 0 10px 25px rgba(30,64,175,.08);
+    }
+
+    .tech-section h3 {
+        color: #172554;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 22px;
+    }
+
+    .tech-badge {
+        display: inline-block;
+
+        padding: 10px 18px;
+        margin: 6px;
+
+        border-radius: 25px;
+
+        background: white;
+
+        color: #4338ca;
+
+        font-weight: 700;
+
+        box-shadow: 0 5px 15px rgba(30,64,175,.08);
+    }
+
+
+    /* ================= GOAL ================= */
+
+    .goal-card {
+        margin-top: 35px;
+        padding: 35px;
+
+        text-align: center;
+
+        border-radius: 24px;
+
+        color: white;
+
+        background: linear-gradient(135deg,#4f46e5,#2563eb);
+
+        box-shadow: 0 15px 30px rgba(79,70,229,.20);
+    }
+
+    .goal-card h2 {
+        font-weight: 800;
+    }
+
+    .goal-card p {
+        max-width: 750px;
+        margin: auto;
+
+        line-height: 1.8;
+    }
+
+    .goal-quote {
+        margin-top: 20px;
+
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+
+    @media (max-width: 768px) {
+
+        .about-hero {
+            padding: 30px 22px;
+        }
+
+        .about-hero h1 {
+            font-size: 34px;
+        }
+
+        .about-visual {
+            margin-top: 20px;
+        }
+
+        .ai-section {
+            padding: 25px 20px;
+        }
+
+    }
+
+</style>
+
+
+<div class="about-page">
+
+
+    <!-- ================= HERO ================= -->
+
+    <div class="about-hero">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-7">
+
+                <div class="badge bg-primary mb-3 px-3 py-2">
+                    🎓 Student Quiz Hub
+                </div>
+
+                <h1>
+                    Learn.
+                    <span>Practice.</span>
+                    Grow. 🚀
+                </h1>
+
+                <p>
+                    A smart and interactive learning platform designed
+                    to help students practice programming subjects,
+                    test their knowledge and improve their performance
+                    through quizzes and AI-powered assistance.
+                </p>
+
+            </div>
+
+
+            <div class="col-lg-5">
+
+                <div class="about-visual">
+
+                    <div class="about-circle">
+                        🎓
+                    </div>
+
+                    <div class="about-star">
+                        ⭐
+                    </div>
+
+                    <div class="about-book">
+                        📚
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ABOUT ================= -->
+
+    <div class="section-title">
+
+        <h2>💡 About Student Quiz Hub</h2>
+
+        <p>
+            Everything students need for effective quiz practice.
+        </p>
+
+    </div>
+
+
+    <div class="about-card">
+
+        <p>
+            <strong>Student Quiz Hub</strong> provides a simple,
+            attractive and interactive environment where students
+            can practice programming concepts through MCQ-based
+            quizzes.
+
+            Students can select subjects, attempt quizzes,
+            view detailed results, check their performance on
+            the leaderboard and use the AI Study Assistant
+            to clear their doubts.
+        </p>
+
+    </div>
+
+
+    <!-- ================= WHY ================= -->
+
+    <div class="section-title">
+
+        <h2>🎯 Why Student Quiz Hub?</h2>
+
+        <p>
+            Designed to make learning easier and more engaging.
+        </p>
+
+    </div>
+
+
+    <div class="why-box">
+
+        <ul class="why-list">
+
+            <li>✅ Easy and student-friendly interface</li>
+
+            <li>📝 Practice with subject-wise quizzes</li>
+
+            <li>📊 Get instant score and percentage</li>
+
+            <li>🏆 Compare performance through leaderboard</li>
+
+            <li>🤖 Clear doubts using AI Study Assistant</li>
+
+            <li>📚 Get study tips after completing quizzes</li>
+
+            <li>🚀 Improve knowledge through regular practice</li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ================= FEATURES ================= -->
+
+    <div class="section-title">
+
+        <h2>✨ Key Features</h2>
+
+        <p>
+            Powerful features designed for students.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <div class="col-md-4">
+
+            <div class="about-card">
+
+                <div class="feature-icon">
+                    📝
+                </div>
+
+                <h4>Interactive Quizzes</h4>
+
+                <p>
+                    Attempt multiple-choice questions and
+                    test your understanding of important concepts.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="about-card">
+
+                <div class="feature-icon">
+                    📊
+                </div>
+
+                <h4>Instant Results</h4>
+
+                <p>
+                    Get your score, percentage, grade and
+                    performance immediately after the quiz.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="about-card">
+
+                <div class="feature-icon">
+                    🏆
+                </div>
+
+                <h4>Leaderboard</h4>
+
+                <p>
+                    Check your performance and compare your
+                    quiz scores with other students.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="about-card">
+
+                <div class="feature-icon">
+                    🤖
+                </div>
+
+                <h4>AI Study Assistant</h4>
+
+                <p>
+                    Ask questions and get AI-powered assistance
+                    while studying.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="about-card">
+
+                <div class="feature-icon">
+                    💡
+                </div>
+
+                <h4>Study Tips</h4>
+
+                <p>
+                    Receive useful study suggestions based on
+                    your quiz performance.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="about-card">
+
+                <div class="feature-icon">
+                    📚
+                </div>
+
+                <h4>Subject-wise Practice</h4>
+
+                <p>
+                    Practice different programming subjects
+                    separately and strengthen your concepts.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SUBJECTS ================= -->
+
+    <div class="section-title">
+
+        <h2>📚 Subjects Covered</h2>
+
+        <p>
+            Practice the programming languages you are learning.
+        </p>
+
+    </div>
+
+
+    <div class="row g-3">
+
+
+        <div class="col-6 col-md">
+
+            <div class="subject-card">
+
+                <div class="emoji">🐍</div>
+
+                <h5>Python</h5>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-md">
+
+            <div class="subject-card">
+
+                <div class="emoji">☕</div>
+
+                <h5>Java</h5>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-md">
+
+            <div class="subject-card">
+
+                <div class="emoji">💻</div>
+
+                <h5>C</h5>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-md">
+
+            <div class="subject-card">
+
+                <div class="emoji">⚙️</div>
+
+                <h5>C++</h5>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-md">
+
+            <div class="subject-card">
+
+                <div class="emoji">🟨</div>
+
+                <h5>JavaScript</h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= HOW IT WORKS ================= -->
+
+    <div class="section-title">
+
+        <h2>🚀 How It Works</h2>
+
+        <p>
+            Learning is simple with Student Quiz Hub.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <div class="col-md-3">
+
+            <div class="step-card">
+
+                <div class="step-number">1</div>
+
+                <div class="step-icon">👤</div>
+
+                <h5>Login</h5>
+
+                <p>
+                    Enter your student details to get started.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="step-card">
+
+                <div class="step-number">2</div>
+
+                <div class="step-icon">📚</div>
+
+                <h5>Select Subject</h5>
+
+                <p>
+                    Choose the subject you want to practice.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="step-card">
+
+                <div class="step-number">3</div>
+
+                <div class="step-icon">📝</div>
+
+                <h5>Take Quiz</h5>
+
+                <p>
+                    Answer the questions and submit your quiz.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="step-card">
+
+                <div class="step-number">4</div>
+
+                <div class="step-icon">🏆</div>
+
+                <h5>View Result</h5>
+
+                <p>
+                    Check your score and improve your performance.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= AI ================= -->
+
+    <div class="ai-section">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-7">
+
+                <h2>
+                    🤖 Meet Your AI Study Assistant
+                </h2>
+
+                <p>
+                    Learning becomes easier when you have help
+                    whenever you need it. The AI Study Assistant
+                    allows students to ask questions and get
+                    useful explanations while studying.
+                </p>
+
+            </div>
+
+
+            <div class="col-lg-5">
+
+                <div class="ai-feature">
+                    💬 Ask questions about your subjects
+                </div>
+
+                <div class="ai-feature">
+                    📖 Get explanations for difficult concepts
+                </div>
+
+                <div class="ai-feature">
+                    💡 Learn and revise more effectively
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TECHNOLOGIES ================= -->
+
+    <div class="tech-section">
+
+        <h3>
+            🛠️ Technologies Used
+        </h3>
+
+        <div class="text-center">
+
+            <span class="tech-badge">
+                🐍 Python
+            </span>
+
+            <span class="tech-badge">
+                🌐 Flask
+            </span>
+
+            <span class="tech-badge">
+                🎨 HTML
+            </span>
+
+            <span class="tech-badge">
+                🎨 CSS
+            </span>
+
+            <span class="tech-badge">
+                💙 Bootstrap
+            </span>
+
+            <span class="tech-badge">
+                ⚡ JavaScript
+            </span>
+
+            <span class="tech-badge">
+                🗄️ SQLite
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= GOAL ================= -->
+
+    <div class="goal-card">
+
+        <h2>
+            🎯 Our Goal
+        </h2>
+
+        <p>
+
+            Our goal is to provide students with a simple,
+            attractive and useful platform where they can
+            practice regularly, identify their weak areas
+            and improve their programming knowledge.
+
+        </p>
+
+        <div class="goal-quote">
+
+            “Learn Today. Practice More. Achieve Better.” 🚀
+
+        </div>
+
+    </div>
+
+
+</div>
+
 {% endblock %}

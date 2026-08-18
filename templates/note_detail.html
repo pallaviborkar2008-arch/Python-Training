@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}{{ note.title }}{% endblock %}
+
+{% block content %}
+
+<style>
+
+.note-detail {
+    max-width: 950px;
+    margin: 35px auto;
+}
+
+.note-header {
+    text-align: center;
+
+    padding: 35px 20px;
+
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2ff,
+            #dbeafe
+        );
+
+    margin-bottom: 30px;
+
+    box-shadow:
+        0 10px 30px rgba(30,64,175,.10);
+}
+
+.note-header h1 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #172554;
+}
+
+.note-topic {
+    background: white;
+
+    padding: 25px;
+
+    margin-bottom: 20px;
+
+    border-radius: 18px;
+
+    border-left: 5px solid #4f46e5;
+
+    box-shadow:
+        0 8px 22px rgba(30,64,175,.08);
+}
+
+.note-topic h3 {
+    color: #312e81;
+
+    font-weight: 800;
+
+    margin-bottom: 15px;
+}
+
+.note-topic li {
+    color: #475569;
+
+    margin-bottom: 8px;
+
+    line-height: 1.6;
+}
+
+.note-example {
+    margin-top: 18px;
+
+    padding: 18px;
+
+    background: #0f172a;
+
+    color: #e2e8f0;
+
+    border-radius: 12px;
+
+    overflow-x: auto;
+
+    font-family: monospace;
+
+    white-space: pre-wrap;
+}
+
+.back-btn {
+    display: inline-block;
+
+    margin-bottom: 20px;
+
+    padding: 10px 20px;
+
+    border-radius: 10px;
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+
+    text-decoration: none;
+
+    font-weight: 700;
+}
+
+.back-btn:hover {
+    background: #4f46e5;
+    color: white;
+}
+
+</style>
+
+
+<div class="container">
+
+    <div class="note-detail">
+
+        <a
+            href="{{ url_for('notes') }}"
+            class="back-btn">
+
+            ← Back to Notes
+
+        </a>
+
+
+        <div class="note-header">
+
+            <h1>
+                📚 {{ note.title }}
+            </h1>
+
+            <p class="text-muted mb-0">
+                Learn the important concepts of {{ subject }}
+            </p>
+
+        </div>
+
+
+        {% for topic in note.topics %}
+
+        <div class="note-topic">
+
+            <h3>
+                {{ loop.index }}. {{ topic.heading }}
+            </h3>
+
+
+            <ul>
+
+                {% for point in topic.points %}
+
+                <li>
+                    {{ point }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+
+            {% if topic.example %}
+
+            <div class="note-example">{{ topic.example }}</div>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

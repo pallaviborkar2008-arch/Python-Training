@@ -1,0 +1,585 @@
+{% extends "base.html" %}
+
+{% block title %}{{ subject }} Quiz | Student Quiz Hub{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .quiz-page {
+        padding-bottom: 40px;
+    }
+
+    /* ================= HEADER ================= */
+
+    .quiz-header {
+        margin-top: 10px;
+        padding: 35px 40px;
+
+        border-radius: 28px;
+
+        background:
+            radial-gradient(
+                circle at 90% 20%,
+                #ddd6fe 0%,
+                transparent 35%
+            ),
+            radial-gradient(
+                circle at 10% 80%,
+                #bfdbfe 0%,
+                transparent 35%
+            ),
+            linear-gradient(
+                135deg,
+                #f5f3ff,
+                #e0e7ff
+            );
+
+        box-shadow:
+            0 15px 35px rgba(79,70,229,.12);
+    }
+
+    .quiz-header h1 {
+        font-size: 40px;
+        font-weight: 800;
+        color: #172554;
+    }
+
+    .quiz-header h1 span {
+        background:
+            linear-gradient(
+                90deg,
+                #4f46e5,
+                #2563eb
+            );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .quiz-header p {
+        color: #64748b;
+        font-size: 16px;
+    }
+
+
+    /* ================= QUIZ ICON ================= */
+
+    .quiz-visual {
+        min-height: 170px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: relative;
+    }
+
+    .quiz-circle {
+        width: 155px;
+        height: 155px;
+
+        border-radius: 50%;
+
+        background:
+            linear-gradient(
+                135deg,
+                #c7d2fe,
+                #bfdbfe
+            );
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 75px;
+
+        box-shadow:
+            0 18px 35px rgba(79,70,229,.15);
+    }
+
+    .floating-star {
+        position: absolute;
+        top: 0;
+        right: 30px;
+
+        font-size: 35px;
+    }
+
+    .floating-pencil {
+        position: absolute;
+        bottom: 0;
+        left: 25px;
+
+        background: white;
+
+        padding: 8px 12px;
+
+        border-radius: 14px;
+
+        font-size: 27px;
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,.10);
+    }
+
+
+    /* ================= STUDENT INFO ================= */
+
+    .student-info {
+        margin-top: 25px;
+
+        padding: 15px 20px;
+
+        background: white;
+
+        border-radius: 15px;
+
+        box-shadow:
+            0 8px 20px rgba(30,64,175,.08);
+
+        color: #475569;
+
+        font-weight: 600;
+    }
+
+
+    /* ================= QUESTION CARD ================= */
+
+    .question-card {
+        margin-top: 20px;
+
+        padding: 25px;
+
+        background: rgba(255,255,255,.94);
+
+        border: none;
+
+        border-radius: 20px;
+
+        box-shadow:
+            0 10px 25px rgba(30,64,175,.09);
+
+        transition: .3s;
+    }
+
+    .question-card:hover {
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 15px 30px rgba(30,64,175,.13);
+    }
+
+
+    .question-number {
+        display: inline-block;
+
+        padding: 6px 12px;
+
+        border-radius: 20px;
+
+        background: #eef2ff;
+
+        color: #4f46e5;
+
+        font-size: 13px;
+
+        font-weight: 800;
+
+        margin-bottom: 12px;
+    }
+
+
+    .question-text {
+        color: #172554;
+
+        font-size: 18px;
+
+        font-weight: 700;
+
+        margin-bottom: 20px;
+    }
+
+
+    /* ================= OPTIONS ================= */
+
+    .option-box {
+        padding: 12px 15px;
+
+        margin-bottom: 10px;
+
+        border: 1px solid #e0e7ff;
+
+        border-radius: 12px;
+
+        background: #f8f7ff;
+
+        transition: .25s;
+    }
+
+    .option-box:hover {
+        background: #eef2ff;
+
+        border-color: #818cf8;
+    }
+
+    .form-check-input {
+        cursor: pointer;
+    }
+
+    .form-check-input:checked {
+        background-color: #4f46e5;
+
+        border-color: #4f46e5;
+    }
+
+    .form-check-label {
+        cursor: pointer;
+
+        color: #475569;
+
+        font-weight: 500;
+
+        width: 100%;
+    }
+
+
+    /* ================= SUBMIT ================= */
+
+    .submit-area {
+        margin-top: 30px;
+
+        padding: 25px;
+
+        text-align: center;
+
+        background: rgba(255,255,255,.90);
+
+        border-radius: 20px;
+
+        box-shadow:
+            0 10px 25px rgba(30,64,175,.08);
+    }
+
+    .quiz-btn {
+        width: 100%;
+
+        border: none;
+
+        padding: 13px;
+
+        border-radius: 12px;
+
+        color: white;
+
+        font-size: 16px;
+
+        font-weight: 700;
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #2563eb
+            );
+
+        transition: .3s;
+    }
+
+    .quiz-btn:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 10px 20px rgba(79,70,229,.25);
+    }
+
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 768px) {
+
+        .quiz-header {
+            padding: 28px 22px;
+        }
+
+        .quiz-header h1 {
+            font-size: 32px;
+        }
+
+        .quiz-visual {
+            margin-top: 20px;
+        }
+
+        .question-card {
+            padding: 20px;
+        }
+
+    }
+
+</style>
+
+
+<div class="quiz-page">
+
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="quiz-header">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-7">
+
+                <div class="badge bg-primary mb-3 px-3 py-2">
+
+                    🎯 Quiz Time
+
+                </div>
+
+
+                <h1>
+
+                    📝
+                    <span>{{ subject }}</span>
+                    Quiz
+
+                </h1>
+
+
+                <p>
+
+                    Read each question carefully and select
+                    the correct answer. Good luck! 🚀
+
+                </p>
+
+            </div>
+
+
+            <div class="col-lg-5">
+
+                <div class="quiz-visual">
+
+                    <div class="quiz-circle">
+                        📝
+                    </div>
+
+                    <div class="floating-star">
+                        ⭐
+                    </div>
+
+                    <div class="floating-pencil">
+                        ✏️
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= STUDENT INFO ================= -->
+
+    <div class="student-info">
+
+        👤 Student:
+        <strong>{{ student_name }}</strong>
+
+        &nbsp;&nbsp; | &nbsp;&nbsp;
+
+        📚 Subject:
+        <strong>{{ subject }}</strong>
+
+    </div>
+
+
+    <!-- ================= QUIZ FORM ================= -->
+
+    <form
+        action="{{ url_for('result') }}"
+        method="POST">
+
+
+        <input
+            type="hidden"
+            name="student_id"
+            value="{{ student_id }}">
+
+
+        <input
+            type="hidden"
+            name="student_name"
+            value="{{ student_name }}">
+
+
+        <input
+            type="hidden"
+            name="subject"
+            value="{{ subject }}">
+
+
+
+        <!-- ================= QUESTIONS ================= -->
+
+        {% for q in questions %}
+
+        <div class="question-card">
+
+
+            <div class="question-number">
+
+                ❓ Question {{ loop.index }}
+
+            </div>
+
+
+            <div class="question-text">
+
+                {{ q.question }}
+
+            </div>
+
+
+            <!-- OPTION 1 -->
+
+            <div class="option-box">
+
+                <div class="form-check">
+
+                    <input
+                        class="form-check-input"
+                        type="radio"
+                        name="q{{ loop.index0 }}"
+                        value="{{ q.options[0] }}"
+                        id="q{{ loop.index0 }}a"
+                        required>
+
+                    <label
+                        class="form-check-label"
+                        for="q{{ loop.index0 }}a">
+
+                        🔘 {{ q.options[0] }}
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- OPTION 2 -->
+
+            <div class="option-box">
+
+                <div class="form-check">
+
+                    <input
+                        class="form-check-input"
+                        type="radio"
+                        name="q{{ loop.index0 }}"
+                        value="{{ q.options[1] }}"
+                        id="q{{ loop.index0 }}b">
+
+                    <label
+                        class="form-check-label"
+                        for="q{{ loop.index0 }}b">
+
+                        🔘 {{ q.options[1] }}
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- OPTION 3 -->
+
+            <div class="option-box">
+
+                <div class="form-check">
+
+                    <input
+                        class="form-check-input"
+                        type="radio"
+                        name="q{{ loop.index0 }}"
+                        value="{{ q.options[2] }}"
+                        id="q{{ loop.index0 }}c">
+
+                    <label
+                        class="form-check-label"
+                        for="q{{ loop.index0 }}c">
+
+                        🔘 {{ q.options[2] }}
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- OPTION 4 -->
+
+            <div class="option-box">
+
+                <div class="form-check">
+
+                    <input
+                        class="form-check-input"
+                        type="radio"
+                        name="q{{ loop.index0 }}"
+                        value="{{ q.options[3] }}"
+                        id="q{{ loop.index0 }}d">
+
+                    <label
+                        class="form-check-label"
+                        for="q{{ loop.index0 }}d">
+
+                        🔘 {{ q.options[3] }}
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+        {% endfor %}
+
+
+        <!-- ================= SUBMIT ================= -->
+
+        <div class="submit-area">
+
+            <p class="text-muted mb-3">
+
+                💡 Make sure you have answered
+                all questions before submitting.
+
+            </p>
+
+
+            <button
+                type="submit"
+                class="quiz-btn">
+
+                🚀 Submit Quiz
+
+            </button>
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+
+{% endblock %}

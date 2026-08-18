@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Add Students{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-4">
+
+    <div class="col-md-6">
+
+        <div class="card p-0">
+
+            <!-- Header -->
+            <div class="card-header bg-dark text-white text-center">
+                <h5 class="mb-0">➕ Add New Student</h5>
+            </div>
+
+
+            <!-- Form -->
+            <div class="card-body">
+
+                <form action="{{ url_for('add_students') }}" method="POST">
+
+                    <!-- Student Name -->
+                    <div class="mb-3">
+
+                        <label for="name" class="form-label fw-semibold">
+                            👨‍🎓 Student Name
+                        </label>
+
+                        <input
+                            name="student_name"
+                            class="form-control"
+                            id="name"
+                            type="text"
+                            placeholder="Enter student name"
+                            required>
+
+                    </div>
+                    <!-- SUBJECT -->
+
+<div class="mb-3">
+
+    <label for="subject" class="form-label">
+        📚 Subject
+    </label>
+
+    <select
+        name="subject"
+        id="subject"
+        class="form-select"
+        required>
+
+        <option value="">Select Subject</option>
+
+        <option value="C">C</option>
+        <option value="C++">C++</option>
+        <option value="Java">Java</option>
+        <option value="Python">Python</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="HTML">HTML</option>
+        <option value="SQL Database">SQL Database</option>
+        <option value="Data Structures">Data Structures</option>
+        <option value="Computer Networks">Computer Networks</option>
+        <option value="Operating System">Operating System</option>
+
+    </select>
+
+</div>
+
+                    <!-- Marks -->
+                    <div class="mb-3">
+
+                        <label for="score" class="form-label fw-semibold">
+                            📝 Marks
+                        </label>
+
+                        <input
+                            name="score"
+                            class="form-control"
+                            id="score"
+                            type="number"
+                            placeholder="Enter score"
+                            min="0"
+                            required>
+
+                    </div>
+
+
+                    <!-- Attempts -->
+                    <div class="mb-3">
+
+                        <label for="attempts" class="form-label fw-semibold">
+                            🔄 Attempts
+                        </label>
+
+                        <input
+                            name="attempts"
+                            class="form-control"
+                            id="attempts"
+                            type="number"
+                            placeholder="Enter attempts"
+                            min="1"
+                            required>
+
+                    </div>
+
+
+                    <!-- Add Button -->
+                    <div class="d-grid">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary">
+
+                            ➕ Add Student
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

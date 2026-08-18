@@ -3,70 +3,628 @@
 {% block title %}Student Quiz Hub{% endblock %}
 
 {% block content %}
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f8fc;
-            text-align: center;
-            margin: 0;
+
+<style>
+
+    /* HOME PAGE */
+
+    .home-page {
+        margin-top: -10px;
+    }
+
+    /* HERO */
+
+    .hero {
+        margin-top: 20px;
+        padding: 55px 55px;
+        border-radius: 28px;
+
+        background:
+            radial-gradient(circle at 90% 20%,
+                #ddd6fe 0%,
+                transparent 35%),
+
+            radial-gradient(circle at 70% 80%,
+                #bfdbfe 0%,
+                transparent 40%),
+
+            linear-gradient(
+                135deg,
+                #f5f3ff,
+                #e0e7ff
+            );
+
+        box-shadow:
+            0 15px 40px rgba(79, 70, 229, 0.12);
+
+        overflow: hidden;
+    }
+
+
+    /* LEFT SIDE */
+
+    .welcome-badge {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 30px;
+        background: #e0e7ff;
+        color: #4f46e5;
+        font-weight: 700;
+        margin-bottom: 18px;
+    }
+
+
+    .hero-title {
+        font-size: 58px;
+        font-weight: 800;
+        line-height: 1.1;
+        color: #172554;
+        margin-bottom: 18px;
+    }
+
+
+    .hero-title span {
+        background:
+            linear-gradient(
+                90deg,
+                #4f46e5,
+                #2563eb
+            );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+
+    .hero-tagline {
+        font-size: 23px;
+        font-weight: 700;
+        color: #4f46e5;
+        margin-bottom: 18px;
+    }
+
+
+    .hero-description {
+        font-size: 18px;
+        line-height: 1.7;
+        color: #475569;
+        max-width: 600px;
+        margin-bottom: 30px;
+    }
+
+
+    /* BUTTONS */
+
+    .hero-btn {
+        padding: 13px 28px;
+        border-radius: 12px;
+        font-size: 17px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 12px;
+        transition: .3s;
+    }
+
+
+    .start-btn {
+        color: white;
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #2563eb
+            );
+
+        box-shadow:
+            0 8px 18px rgba(79, 70, 229, .25);
+    }
+
+
+    .start-btn:hover {
+        color: white;
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 12px 25px rgba(79, 70, 229, .35);
+    }
+
+
+    .subjects-btn {
+        color: #4f46e5;
+        border: 2px solid #6366f1;
+        background: rgba(255,255,255,.55);
+    }
+
+
+    .subjects-btn:hover {
+        color: white;
+        background: #4f46e5;
+        transform: translateY(-3px);
+    }
+
+
+    /* RIGHT ILLUSTRATION */
+
+    .hero-visual {
+        min-height: 390px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+
+    .study-circle {
+        width: 330px;
+        height: 330px;
+        border-radius: 50%;
+
+        background:
+            radial-gradient(
+                circle,
+                #c7d2fe,
+                #ddd6fe
+            );
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        box-shadow:
+            0 20px 40px rgba(79,70,229,.12);
+    }
+
+
+    .books {
+        position: absolute;
+        bottom: 55px;
+        font-size: 105px;
+        line-height: .7;
+    }
+
+
+    .cap {
+        position: absolute;
+        top: 40px;
+        font-size: 105px;
+    }
+
+
+    .checklist {
+        position: absolute;
+        left: 10px;
+        bottom: 65px;
+
+        background: white;
+        padding: 14px;
+        border-radius: 15px;
+
+        box-shadow:
+            0 10px 25px rgba(0,0,0,.12);
+
+        font-size: 34px;
+    }
+
+
+    .plant {
+        position: absolute;
+        right: 5px;
+        bottom: 55px;
+        font-size: 65px;
+    }
+
+
+    /* FEATURE CARDS */
+
+    .features {
+        margin-top: 35px;
+        margin-bottom: 30px;
+    }
+
+
+    /* CLICKABLE CARD LINK */
+
+    .feature-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        height: 100%;
+    }
+
+
+    .feature-link:hover {
+        color: inherit;
+    }
+
+
+    .feature-card {
+        height: 100%;
+        padding: 30px 22px;
+        text-align: center;
+        border-radius: 22px;
+
+        background: rgba(255,255,255,.82);
+
+        border: 1px solid rgba(99,102,241,.08);
+
+        box-shadow:
+            0 10px 28px rgba(30,64,175,.10);
+
+        transition: .3s;
+
+        cursor: pointer;
+    }
+
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+
+        box-shadow:
+            0 18px 35px rgba(30,64,175,.16);
+    }
+
+
+    .feature-icon {
+        width: 75px;
+        height: 75px;
+
+        margin: auto;
+        margin-bottom: 18px;
+
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 35px;
+
+        background: #eef2ff;
+    }
+
+
+    .feature-card h4 {
+        font-size: 19px;
+        font-weight: 800;
+        color: #172554;
+        margin-bottom: 10px;
+    }
+
+
+    .feature-card p {
+        color: #64748b;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+
+    /* RESPONSIVE */
+
+    @media (max-width: 992px) {
+
+        .hero {
+            padding: 40px 30px;
         }
 
-        nav {
-            background-color: #2c3e50;
-            padding: 15px;
+        .hero-title {
+            font-size: 45px;
         }
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 15px;
-            font-weight: bold;
+        .hero-visual {
+            margin-top: 30px;
+        }
+    }
+
+
+    @media (max-width: 576px) {
+
+        .hero {
+            padding: 30px 20px;
         }
 
-        .container {
-            padding: 40px;
+        .hero-title {
+            font-size: 36px;
         }
 
-        h1 {
-            color: #2c3e50;
+        .hero-tagline {
+            font-size: 19px;
         }
 
-        .card {
-            background: white;
-            width: 60%;
-            margin: auto;
-            padding: 20px;
-            border-radius: 10px;
+        .hero-description {
+            font-size: 16px;
         }
-    </style>
-</head>
-<body>
-    <nav>
-        <a href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('subjects') }}">Subjects</a>
-        <a href="{{ url_for('students') }}">Students</a>
-        <a href="{{ url_for('about') }}">About</a>
-    </nav>
 
-<div class="container">
-        <div class="card">
-            <h1>📚 Welcome to Student Quiz Hub!</h1>
+        .study-circle {
+            width: 260px;
+            height: 260px;
+        }
 
-            <p>
-                This is a platform where students can take quizzes,
-                improve their knowledge, and track their progress.
-            </p>
+        .books {
+            font-size: 80px;
+        }
 
-            <h2>✨ Features</h2>
-            <p>✔ Take Subject-wise Quizzes</p>
-            <p>✔ View Scores and Results</p>
-            <p>✔ Track Quiz Attempts</p>
-            <p>✔ Monitor Learning Progress</p>
+        .cap {
+            font-size: 75px;
+        }
 
-            <h3>🎯 Learn, Practice, and Succeed!</h3>
+        .plant {
+            font-size: 50px;
+        }
+
+        .checklist {
+            font-size: 25px;
+        }
+    }
+
+</style>
+
+
+<div class="home-page">
+
+    <!-- =========================
+         HERO SECTION
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="row align-items-center">
+
+            <!-- LEFT -->
+
+            <div class="col-lg-7">
+
+                <div class="welcome-badge">
+                    Welcome to
+                </div>
+
+
+                <h1 class="hero-title">
+                    Student
+                    <span>Quiz Hub</span>
+                    🎓
+                </h1>
+
+
+                <div class="hero-tagline">
+                    Learn • Practice • Improve • Track Your Progress
+                </div>
+
+
+                <p class="hero-description">
+
+                    An intelligent platform to help students
+                    test their knowledge, track performance
+                    and achieve excellence.
+
+                </p>
+
+
+                <div>
+
+                    <a
+                        href="{{ url_for('subjects') }}"
+                        class="hero-btn start-btn">
+
+                        📖 Start Quiz
+
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('subjects') }}"
+                        class="hero-btn subjects-btn">
+
+                        ▦ View Subjects
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="col-lg-5">
+
+                <div class="hero-visual">
+
+                    <div class="study-circle">
+
+                        <div class="cap">
+                            🎓
+                        </div>
+
+                        <div class="books">
+                            📚
+                        </div>
+
+                        <div class="checklist">
+                            📋
+                        </div>
+
+                        <div class="plant">
+                            🪴
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
-    </div>
 
-</body>
-</html>
+    </section>
+
+
+
+    <!-- =========================
+         FEATURES
+    ========================== -->
+
+    <section class="features">
+
+        <div class="row g-4">
+
+
+            <!-- CARD 1 : SUBJECTS -->
+
+            <div class="col-lg col-md-6">
+
+                <a
+                    href="{{ url_for('subjects') }}"
+                    class="feature-link">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            📚
+                        </div>
+
+                        <h4>
+                            Multiple Subjects
+                        </h4>
+
+                        <p>
+                            Explore a wide range of
+                            subjects and quizzes.
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- CARD 2 : STUDENTS / PROGRESS -->
+
+            <div class="col-lg col-md-6">
+
+                <a
+                    href="{{ url_for('students') }}"
+                    class="feature-link">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            📈
+                        </div>
+
+                        <h4>
+                            Track Progress
+                        </h4>
+
+                        <p>
+                            Track your scores and
+                            improve your learning.
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- CARD 3 : LEADERBOARD -->
+
+            <div class="col-lg col-md-6">
+
+                <a
+                    href="{{ url_for('leaderboard') }}"
+                    class="feature-link">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            🏆
+                        </div>
+
+                        <h4>
+                            Leaderboard
+                        </h4>
+
+                        <p>
+                            Compete with others and
+                            be on the top.
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- CARD 4 : AI ASSISTANT -->
+
+            <div class="col-lg col-md-6">
+
+                <a
+    href="{{ url_for('ai_chatbox') }}"
+    class="feature-link">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            🤖
+                        </div>
+
+                        <h4>
+                            AI Assistant
+                        </h4>
+
+                        <p>
+                            Get instant help and
+                            answers to your doubts.
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- CARD 5 : STUDENT MANAGEMENT -->
+
+            <div class="col-lg col-md-6">
+
+                <a
+                    href="{{ url_for('students') }}"
+                    class="feature-link">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            👥
+                        </div>
+
+                        <h4>
+                            Student Management
+                        </h4>
+
+                        <p>
+                            Manage students and
+                            their quiz performance.
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+</div>
+
 {% endblock %}

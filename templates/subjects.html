@@ -1,35 +1,588 @@
 {% extends "base.html" %}
 
-{% block title %}Student Quiz Hub{% endblock %}
+{% block title %}Subjects | Student Quiz Hub{% endblock %}
 
 {% block content %}
 
-    <h1>📚 Available Subjects</h1>
+<style>
 
-    <p><b>Instructions:</b> Use this app to explore different subjects,
-        practice quiz questions, improve your knowledge, and track your learning progress.
-        Select a subject below and answer the questions provided.</p>
+    .subjects-page {
+        padding-bottom: 30px;
+    }
 
-    <ul>
+    /* ================= HERO ================= */
+
+    .subject-hero {
+        margin-top: 10px;
+        padding: 40px;
+        border-radius: 28px;
+
+        background:
+            radial-gradient(
+                circle at 90% 20%,
+                #ddd6fe 0%,
+                transparent 35%
+            ),
+
+            radial-gradient(
+                circle at 10% 80%,
+                #bfdbfe 0%,
+                transparent 35%
+            ),
+
+            linear-gradient(
+                135deg,
+                #f5f3ff,
+                #e0e7ff
+            );
+
+        box-shadow:
+            0 15px 35px rgba(79,70,229,.12);
+    }
+
+
+    .subject-hero h1 {
+        font-size: 43px;
+        font-weight: 800;
+        color: #172554;
+        margin-bottom: 12px;
+    }
+
+
+    .subject-hero h1 span {
+        background:
+            linear-gradient(
+                90deg,
+                #4f46e5,
+                #2563eb
+            );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+
+    .subject-hero p {
+        font-size: 17px;
+        line-height: 1.7;
+        color: #64748b;
+        max-width: 600px;
+    }
+
+
+    /* ================= STUDENT NAME ================= */
+
+    .student-badge {
+        display: inline-block;
+
+        padding: 9px 18px;
+
+        border-radius: 30px;
+
+        background: #eef2ff;
+
+        color: #4f46e5;
+
+        font-weight: 700;
+
+        margin-bottom: 18px;
+    }
+
+
+    /* ================= ILLUSTRATION ================= */
+
+    .subject-visual {
+        min-height: 260px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: relative;
+    }
+
+
+    .subject-circle {
+        width: 230px;
+        height: 230px;
+
+        border-radius: 50%;
+
+        background:
+            linear-gradient(
+                135deg,
+                #c7d2fe,
+                #bfdbfe
+            );
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 105px;
+
+        box-shadow:
+            0 18px 35px rgba(79,70,229,.15);
+    }
+
+
+    .floating-code {
+        position: absolute;
+
+        top: 10px;
+        right: 25px;
+
+        background: white;
+
+        padding: 12px 16px;
+
+        border-radius: 14px;
+
+        font-size: 28px;
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,.10);
+    }
+
+
+    .floating-book {
+        position: absolute;
+
+        bottom: 15px;
+        left: 20px;
+
+        background: white;
+
+        padding: 12px 16px;
+
+        border-radius: 14px;
+
+        font-size: 30px;
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,.10);
+    }
+
+
+    /* ================= SECTION TITLE ================= */
+
+    .section-title {
+        text-align: center;
+
+        margin-top: 38px;
+        margin-bottom: 25px;
+    }
+
+
+    .section-title h2 {
+        font-size: 30px;
+
+        font-weight: 800;
+
+        color: #172554;
+    }
+
+
+    .section-title p {
+        color: #64748b;
+    }
+
+
+    /* ================= SUBJECT CARD ================= */
+
+    .subject-card {
+        height: 100%;
+
+        padding: 25px;
+
+        border-radius: 22px;
+
+        background: rgba(255,255,255,.88);
+
+        border: 1px solid rgba(99,102,241,.08);
+
+        box-shadow:
+            0 10px 28px rgba(30,64,175,.10);
+
+        transition: all .3s ease;
+
+        position: relative;
+
+        overflow: hidden;
+    }
+
+
+    .subject-card:hover {
+        transform: translateY(-8px);
+
+        box-shadow:
+            0 18px 35px rgba(30,64,175,.17);
+    }
+
+
+    .subject-card::before {
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 5px;
+
+        background:
+            linear-gradient(
+                90deg,
+                #4f46e5,
+                #2563eb
+            );
+    }
+
+
+    .subject-icon {
+        width: 75px;
+        height: 75px;
+
+        border-radius: 20px;
+
+        background: #eef2ff;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 38px;
+
+        margin-bottom: 18px;
+    }
+
+
+    .subject-card h3 {
+        color: #172554;
+
+        font-size: 23px;
+
+        font-weight: 800;
+
+        margin-bottom: 12px;
+    }
+
+
+    .question-box {
+        background: #f8f7ff;
+
+        border-left: 4px solid #6366f1;
+
+        padding: 13px 15px;
+
+        border-radius: 10px;
+
+        margin-bottom: 18px;
+
+        color: #475569;
+
+        font-size: 14px;
+
+        line-height: 1.5;
+    }
+
+
+    .question-title {
+        color: #4f46e5;
+
+        font-weight: 700;
+
+        display: block;
+
+        margin-bottom: 4px;
+    }
+
+
+    .quiz-btn {
+        width: 100%;
+
+        border: none;
+
+        padding: 11px;
+
+        border-radius: 11px;
+
+        color: white;
+
+        font-weight: 700;
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #2563eb
+            );
+
+        transition: .3s;
+    }
+
+
+    .quiz-btn:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 8px 18px rgba(79,70,229,.25);
+    }
+
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 768px) {
+
+        .subject-hero {
+            padding: 28px 22px;
+        }
+
+        .subject-hero h1 {
+            font-size: 34px;
+        }
+
+        .subject-visual {
+            margin-top: 25px;
+        }
+
+    }
+
+</style>
+
+
+<div class="subjects-page">
+
+
+    <!-- ================= HERO ================= -->
+
+    <div class="subject-hero">
+
+        <div class="row align-items-center">
+
+            <!-- LEFT -->
+
+            <div class="col-lg-7">
+
+                {% if student_name %}
+
+                <div class="student-badge">
+                    👋 Hello, {{ student_name }}
+                </div>
+
+                {% endif %}
+
+
+                <h1>
+                    Explore Your
+                    <span>Subjects</span> 📚
+                </h1>
+
+
+                <p>
+                    Choose a subject, practice your knowledge
+                    and test your skills with an interactive quiz.
+                    Learn at your own pace and improve your score.
+                </p>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="col-lg-5">
+
+                <div class="subject-visual">
+
+                    <div class="subject-circle">
+                        📚
+                    </div>
+
+                    <div class="floating-code">
+                        💻
+                    </div>
+
+                    <div class="floating-book">
+                        🎓
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= TITLE ================= -->
+
+    <div class="section-title">
+
+        <h2>
+            Choose a Subject
+        </h2>
+
+        <p>
+            Start learning and challenge yourself 🚀
+        </p>
+
+    </div>
+
+
+
+    <!-- ================= SUBJECTS ================= -->
+
+    <div class="row g-4">
+
+
         {% for subject in subjects %}
-            <li>{{ subject }}</li>
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="subject-card">
+
+
+                <!-- ICON -->
+
+                <div class="subject-icon">
+
+                    {% if subject == "Python" %}
+
+                        🐍
+
+                    {% elif subject == "Java" %}
+
+                        ☕
+
+                    {% elif subject == "C" %}
+
+                        💻
+
+                    {% elif subject == "C++" %}
+
+                        ⚙️
+
+                    {% elif subject == "JavaScript" %}
+
+                        🟨
+                    {% elif subject == "HTML" %}
+    🌐
+{% elif subject == "SQL Database" %}
+    🗄️
+{% elif subject == "Data Structures" %}
+    🌳
+{% elif subject == "Computer Networks" %}
+    🌐
+{% elif subject == "Operating System" %}
+    💻
+                    {% else %}
+
+                        📚
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- SUBJECT NAME -->
+
+                <h3>
+                    {{ subject }}
+                </h3>
+
+
+                <!-- SAMPLE QUESTION -->
+
+                <div class="question-box">
+
+                    <span class="question-title">
+                        💡 Sample Question
+                    </span>
+
+
+                    {% if subject == "Python" %}
+
+                        What is the correct extension
+                        of a Python file?
+
+                    {% elif subject == "Java" %}
+
+                        Which keyword is used to create
+                        a class in Java?
+
+                    {% elif subject == "C" %}
+
+                        Which function is used to display
+                        output in C?
+
+                    {% elif subject == "C++" %}
+
+                        Which symbol is used for
+                        single-line comments in C++?
+
+                    {% elif subject == "JavaScript" %}
+
+                        Which keyword is used to declare
+                        a variable in JavaScript?
+                    {% elif subject == "HTML" %}
+
+    Which tag is used to create a hyperlink?
+
+{% elif subject == "SQL Database" %}
+
+    Which command is used to retrieve data from a database?
+
+{% elif subject == "Data Structures" %}
+
+    Which data structure follows LIFO?
+
+{% elif subject == "Computer Networks" %}
+
+    What does LAN stand for?
+
+{% elif subject == "Operating System" %}
+
+    What is the main function of an operating system?
+
+                    {% else %}
+
+                        Test your knowledge with
+                        this subject.
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- START QUIZ -->
+
+                <a
+                    href="{{ url_for('quiz', subject=subject) }}"
+                    class="text-decoration-none">
+
+                    <button class="quiz-btn">
+
+                        🎯 Start Quiz
+
+                    </button>
+
+                </a>
+
+
+            </div>
+
+        </div>
+
         {% endfor %}
-    </ul>
 
-    <h2>Sample Questions</h2>
 
-    <p><b>C:</b> What is a pointer?</p>
-    <p><b>C++:</b> What is inheritance?</p>
-    <p><b>Java:</b> What is JVM?</p>
-    <p><b>Python:</b> What is a list?</p>
-    <p><b>JavaScript:</b> What is DOM?</p>
+    </div>
 
-    <p>
-        <a href="{{ url_for('home') }}">Home</a> |
-        <a href="{{ url_for('students') }}">Students</a> |
-        <a href="{{ url_for('about') }}">About</a>
-    </p>
+</div>
 
-</body>
-</html>
+
 {% endblock %}

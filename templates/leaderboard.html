@@ -1,0 +1,680 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard | Student Quiz Hub{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .leaderboard-page {
+        padding-bottom: 35px;
+    }
+
+    /* ================= HERO ================= */
+
+    .leaderboard-hero {
+        margin-top: 10px;
+        padding: 40px;
+        border-radius: 28px;
+
+        background:
+            radial-gradient(
+                circle at 90% 20%,
+                #ddd6fe 0%,
+                transparent 35%
+            ),
+
+            radial-gradient(
+                circle at 10% 80%,
+                #bfdbfe 0%,
+                transparent 35%
+            ),
+
+            linear-gradient(
+                135deg,
+                #f5f3ff,
+                #e0e7ff
+            );
+
+        box-shadow:
+            0 15px 35px rgba(79,70,229,.12);
+    }
+
+
+    .leaderboard-hero h1 {
+        font-size: 43px;
+        font-weight: 800;
+        color: #172554;
+        margin-bottom: 12px;
+    }
+
+
+    .leaderboard-hero h1 span {
+        background:
+            linear-gradient(
+                90deg,
+                #4f46e5,
+                #2563eb
+            );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+
+    .leaderboard-hero p {
+        color: #64748b;
+        font-size: 17px;
+        line-height: 1.7;
+        max-width: 600px;
+    }
+
+
+    /* ================= TROPHY ================= */
+
+    .trophy-area {
+        min-height: 270px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: relative;
+    }
+
+
+    .trophy-circle {
+        width: 225px;
+        height: 225px;
+
+        border-radius: 50%;
+
+        background:
+            linear-gradient(
+                135deg,
+                #c7d2fe,
+                #bfdbfe
+            );
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 115px;
+
+        box-shadow:
+            0 18px 35px rgba(79,70,229,.15);
+    }
+
+
+    .floating-star {
+        position: absolute;
+
+        top: 20px;
+        right: 30px;
+
+        font-size: 38px;
+    }
+
+
+    .floating-medal {
+        position: absolute;
+
+        bottom: 20px;
+        left: 20px;
+
+        background: white;
+
+        padding: 12px 15px;
+
+        border-radius: 14px;
+
+        font-size: 30px;
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,.10);
+    }
+
+
+    /* ================= TITLE ================= */
+
+    .section-title {
+        text-align: center;
+
+        margin-top: 38px;
+        margin-bottom: 25px;
+    }
+
+
+    .section-title h2 {
+        font-size: 30px;
+        font-weight: 800;
+        color: #172554;
+    }
+
+
+    .section-title p {
+        color: #64748b;
+    }
+
+
+    /* ================= LEADERBOARD CARD ================= */
+
+    .leaderboard-card {
+        background: rgba(255,255,255,.90);
+
+        border-radius: 24px;
+
+        padding: 25px;
+
+        box-shadow:
+            0 12px 30px rgba(30,64,175,.10);
+    }
+
+
+    /* ================= TABLE ================= */
+
+    .table {
+        vertical-align: middle;
+    }
+
+
+    .table thead th {
+        background: #eef2ff;
+
+        color: #312e81;
+
+        font-weight: 700;
+
+        border: none;
+
+        padding: 15px;
+    }
+
+
+    .table tbody td {
+        padding: 15px;
+
+        color: #475569;
+
+        border-color: #eef2ff;
+    }
+
+
+    .table tbody tr {
+        transition: .25s;
+    }
+
+
+    .table tbody tr:hover {
+        background: #f8f7ff;
+
+        transform: scale(1.005);
+    }
+
+
+    /* ================= RANK ================= */
+
+    .rank {
+        font-size: 20px;
+
+        font-weight: 800;
+
+        color: #4f46e5;
+    }
+
+
+    .rank-1 {
+        font-size: 25px;
+    }
+
+
+    /* ================= STUDENT ================= */
+
+    .student-name {
+        font-weight: 700;
+
+        color: #172554;
+    }
+
+
+    /* ================= SCORE ================= */
+
+    .score {
+        font-size: 18px;
+
+        font-weight: 800;
+
+        color: #4f46e5;
+    }
+
+
+    /* ================= STATUS ================= */
+
+    .status-pass {
+        background: #dcfce7;
+
+        color: #15803d;
+
+        padding: 6px 12px;
+
+        border-radius: 20px;
+
+        font-size: 13px;
+
+        font-weight: 700;
+    }
+
+
+    .status-fail {
+        background: #fee2e2;
+
+        color: #dc2626;
+
+        padding: 6px 12px;
+
+        border-radius: 20px;
+
+        font-size: 13px;
+
+        font-weight: 700;
+    }
+
+
+    /* ================= TOP THREE ================= */
+
+    .top-card {
+        height: 100%;
+
+        text-align: center;
+
+        padding: 22px;
+
+        border-radius: 20px;
+
+        background: rgba(255,255,255,.88);
+
+        box-shadow:
+            0 10px 25px rgba(30,64,175,.09);
+
+        transition: .3s;
+    }
+
+
+    .top-card:hover {
+        transform: translateY(-6px);
+    }
+
+
+    .top-icon {
+        font-size: 45px;
+
+        margin-bottom: 8px;
+    }
+
+
+    .top-card h4 {
+        font-size: 18px;
+
+        font-weight: 800;
+
+        color: #172554;
+    }
+
+
+    .top-card p {
+        margin: 5px 0;
+
+        color: #64748b;
+    }
+
+
+    .top-score {
+        color: #4f46e5;
+
+        font-size: 22px;
+
+        font-weight: 800;
+    }
+
+
+    /* ================= EMPTY ================= */
+
+    .empty-box {
+        text-align: center;
+
+        padding: 50px;
+
+        color: #64748b;
+    }
+
+
+    .empty-box .emoji {
+        font-size: 60px;
+
+        margin-bottom: 10px;
+    }
+
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 768px) {
+
+        .leaderboard-hero {
+            padding: 28px 22px;
+        }
+
+        .leaderboard-hero h1 {
+            font-size: 34px;
+        }
+
+        .trophy-area {
+            margin-top: 25px;
+        }
+
+        .leaderboard-card {
+            padding: 15px;
+        }
+
+    }
+
+</style>
+
+
+<div class="leaderboard-page">
+
+
+    <!-- ================= HERO ================= -->
+
+    <div class="leaderboard-hero">
+
+        <div class="row align-items-center">
+
+            <!-- LEFT -->
+
+            <div class="col-lg-7">
+
+                <div class="badge bg-primary mb-3 px-3 py-2">
+                    🏆 Quiz Rankings
+                </div>
+
+
+                <h1>
+                    Student
+                    <span>Leaderboard</span>
+                </h1>
+
+
+                <p>
+                    See the top performers, compare quiz scores
+                    and challenge yourself to reach the top.
+                    Keep learning, keep practicing and keep improving! 🚀
+                </p>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="col-lg-5">
+
+                <div class="trophy-area">
+
+                    <div class="trophy-circle">
+                        🏆
+                    </div>
+
+                    <div class="floating-star">
+                        ⭐
+                    </div>
+
+                    <div class="floating-medal">
+                        🥇
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= TITLE ================= -->
+
+    <div class="section-title">
+
+        <h2>
+            🏆 Top Performers
+        </h2>
+
+        <p>
+            The students with the highest quiz scores
+        </p>
+
+    </div>
+
+
+
+    {% if students %}
+
+
+    <!-- ================= TOP THREE ================= -->
+
+    <div class="row g-4 mb-4">
+
+        {% for student in students[:3] %}
+
+        <div class="col-md-4">
+
+            <div class="top-card">
+
+                <div class="top-icon">
+
+                    {% if loop.index == 1 %}
+                        🥇
+                    {% elif loop.index == 2 %}
+                        🥈
+                    {% else %}
+                        🥉
+                    {% endif %}
+
+                </div>
+
+
+                <h4>
+                    {{ student["student_name"] }}
+                </h4>
+
+
+                <p>
+                    {% if student["subject"] %}
+                        📚 {{ student["subject"] }}
+                    {% else %}
+                        Quiz
+                    {% endif %}
+                </p>
+
+
+                <div class="top-score">
+                    {{ student["score"] }} Points
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+
+    <!-- ================= FULL LEADERBOARD ================= -->
+
+    <div class="leaderboard-card">
+
+        <div class="table-responsive">
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Rank</th>
+
+                        <th>Student</th>
+
+                        <th>Subject</th>
+
+                        <th>Score</th>
+
+                        <th>Attempts</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for student in students %}
+
+                    <tr>
+
+                        <td>
+
+                            <span
+                                class="rank
+                                {% if loop.index == 1 %}
+                                    rank-1
+                                {% endif %}">
+
+                                {% if loop.index == 1 %}
+                                    🥇
+                                {% elif loop.index == 2 %}
+                                    🥈
+                                {% elif loop.index == 3 %}
+                                    🥉
+                                {% else %}
+                                    #{{ loop.index }}
+                                {% endif %}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="student-name">
+
+                                👤 {{ student["student_name"] }}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            {% if student["subject"] %}
+
+                                📚 {{ student["subject"] }}
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="score">
+
+                                {{ student["score"] }}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            {{ student["attempts"] }}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if student["status"] == "Pass" %}
+
+                                <span class="status-pass">
+                                    ✓ Pass
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-fail">
+                                    ✕ Fail
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- ================= EMPTY ================= -->
+
+    <div class="leaderboard-card">
+
+        <div class="empty-box">
+
+            <div class="emoji">
+                🏆
+            </div>
+
+            <h4>
+                No Quiz Results Yet
+            </h4>
+
+            <p>
+                Complete a quiz to appear on the leaderboard.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}

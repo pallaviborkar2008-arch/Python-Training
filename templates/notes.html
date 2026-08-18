@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Notes - Student Quiz Hub{% endblock %}
+
+{% block content %}
+
+<style>
+
+.notes-page {
+    padding: 35px 10px;
+}
+
+.notes-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.notes-heading h1 {
+    font-size: 42px;
+    font-weight: 800;
+    color: #172554;
+}
+
+.notes-heading p {
+    color: #64748b;
+    font-size: 17px;
+}
+
+.notes-card {
+    height: 100%;
+    padding: 28px 20px;
+    text-align: center;
+
+    background: rgba(255,255,255,.9);
+
+    border-radius: 22px;
+
+    border: 1px solid #e0e7ff;
+
+    box-shadow:
+        0 10px 25px rgba(30,64,175,.10);
+
+    transition: .3s;
+}
+
+.notes-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 18px 35px rgba(30,64,175,.18);
+}
+
+.notes-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.notes-card h3 {
+    font-size: 21px;
+    font-weight: 800;
+    color: #172554;
+    margin-bottom: 18px;
+}
+
+.notes-btn {
+    display: inline-block;
+
+    padding: 10px 22px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    color: white;
+
+    font-weight: 700;
+
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #2563eb
+    );
+
+    transition: .3s;
+}
+
+.notes-btn:hover {
+    color: white;
+    transform: translateY(-2px);
+}
+
+</style>
+
+
+<div class="container notes-page">
+
+    <div class="notes-heading">
+
+        <h1>📚 Study Notes</h1>
+
+        <p>
+            Choose a subject and start learning
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        {% for subject, data in notes.items() %}
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="notes-card">
+
+                <div class="notes-icon">
+
+                    {% if subject == "Python" %}
+                        🐍
+                    {% elif subject == "C" %}
+                        💻
+                    {% elif subject == "C++" %}
+                        ⚙️
+                    {% elif subject == "Java" %}
+                        ☕
+                    {% elif subject == "JavaScript" %}
+                        🟨
+                    {% elif subject == "HTML" %}
+                        🌐
+                    {% elif subject == "SQL Database" %}
+                        🗄️
+                    {% elif subject == "Data Structures" %}
+                        📊
+                    {% elif subject == "Computer Networks" %}
+                        🌐
+                    {% elif subject == "Operating System" %}
+                        💻
+                    {% else %}
+                        📘
+                    {% endif %}
+
+                </div>
+
+
+                <h3>
+                    {{ subject }}
+                </h3>
+
+
+                <a
+                    href="{{ url_for('note_detail', subject=subject) }}"
+                    class="notes-btn">
+
+                    📖 Read Notes
+
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

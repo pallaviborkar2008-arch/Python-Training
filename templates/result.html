@@ -1,0 +1,710 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Result | Student Quiz Hub{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .result-page {
+        padding-bottom: 40px;
+    }
+
+    /* ================= HERO ================= */
+
+    .result-hero {
+        margin-top: 10px;
+        padding: 35px 40px;
+        border-radius: 28px;
+
+        background:
+            radial-gradient(
+                circle at 90% 20%,
+                #ddd6fe 0%,
+                transparent 35%
+            ),
+            radial-gradient(
+                circle at 10% 80%,
+                #bfdbfe 0%,
+                transparent 35%
+            ),
+            linear-gradient(
+                135deg,
+                #f5f3ff,
+                #e0e7ff
+            );
+
+        box-shadow:
+            0 15px 35px rgba(79,70,229,.12);
+    }
+
+    .result-hero h1 {
+        font-size: 42px;
+        font-weight: 800;
+        color: #172554;
+    }
+
+    .result-hero h1 span {
+        background:
+            linear-gradient(90deg,#4f46e5,#2563eb);
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .result-hero p {
+        color: #64748b;
+        font-size: 16px;
+    }
+
+
+    /* ================= TROPHY ================= */
+
+    .result-visual {
+        min-height: 180px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: relative;
+    }
+
+    .trophy-circle {
+        width: 165px;
+        height: 165px;
+
+        border-radius: 50%;
+
+        background:
+            linear-gradient(
+                135deg,
+                #c7d2fe,
+                #bfdbfe
+            );
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 85px;
+
+        box-shadow:
+            0 18px 35px rgba(79,70,229,.15);
+    }
+
+    .floating-star {
+        position: absolute;
+        top: 0;
+        right: 30px;
+        font-size: 35px;
+    }
+
+    .floating-medal {
+        position: absolute;
+        bottom: 0;
+        left: 30px;
+
+        background: white;
+
+        padding: 9px 13px;
+
+        border-radius: 14px;
+
+        font-size: 28px;
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,.10);
+    }
+
+
+    /* ================= MAIN RESULT ================= */
+
+    .result-card {
+        margin-top: 30px;
+
+        background: rgba(255,255,255,.94);
+
+        border: none;
+
+        border-radius: 25px;
+
+        padding: 32px;
+
+        box-shadow:
+            0 12px 30px rgba(30,64,175,.10);
+    }
+
+
+    .student-name {
+        font-size: 25px;
+        font-weight: 800;
+        color: #172554;
+    }
+
+    .subject-name {
+        color: #64748b;
+        font-size: 16px;
+    }
+
+
+    /* ================= SCORE ================= */
+
+    .score-box {
+        margin: 25px auto;
+
+        width: 170px;
+        height: 110px;
+
+        border-radius: 20px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #2563eb
+            );
+
+        color: white;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+        justify-content: center;
+
+        box-shadow:
+            0 12px 25px rgba(79,70,229,.22);
+    }
+
+    .score-box strong {
+        font-size: 34px;
+        font-weight: 800;
+    }
+
+    .score-box small {
+        opacity: .9;
+    }
+
+
+    /* ================= RESULT DETAILS ================= */
+
+    .detail-card {
+        height: 100%;
+
+        padding: 20px;
+
+        border-radius: 18px;
+
+        background: #f8f7ff;
+
+        box-shadow:
+            0 7px 18px rgba(30,64,175,.06);
+    }
+
+    .detail-icon {
+        font-size: 28px;
+        margin-bottom: 7px;
+    }
+
+    .detail-card small {
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    .detail-card h4 {
+        color: #312e81;
+        font-weight: 800;
+        margin-top: 5px;
+    }
+
+
+    /* ================= GRADE ================= */
+
+    .grade-box {
+        display: inline-block;
+
+        margin-top: 5px;
+
+        padding: 8px 22px;
+
+        border-radius: 30px;
+
+        background: #eef2ff;
+
+        color: #4f46e5;
+
+        font-size: 18px;
+
+        font-weight: 800;
+    }
+
+
+    /* ================= STUDY TIPS ================= */
+
+    .custom-card {
+        margin-top: 25px;
+
+        border: none;
+
+        border-radius: 20px;
+
+        overflow: hidden;
+
+        box-shadow:
+            0 8px 20px rgba(30,64,175,.07);
+    }
+
+    .custom-header {
+        padding: 14px 20px;
+
+        color: white;
+
+        font-weight: 700;
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #6366f1
+            );
+    }
+
+    .custom-body {
+        padding: 20px;
+
+        background: #f8f7ff;
+
+        color: #475569;
+
+        line-height: 1.7;
+    }
+
+
+    /* ================= RESOURCES ================= */
+
+    .resource-header {
+        padding: 14px 20px;
+
+        color: white;
+
+        font-weight: 700;
+
+        background:
+            linear-gradient(
+                135deg,
+                #2563eb,
+                #3b82f6
+            );
+    }
+
+
+    /* ================= BUTTONS ================= */
+
+    .result-btn {
+        border: none;
+
+        border-radius: 11px;
+
+        padding: 11px 20px;
+
+        font-weight: 700;
+
+        margin: 5px;
+
+        color: white;
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #2563eb
+            );
+    }
+
+    .result-btn:hover {
+        color: white;
+
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 8px 18px rgba(79,70,229,.22);
+    }
+
+    .leader-btn {
+        border: none;
+
+        border-radius: 11px;
+
+        padding: 11px 20px;
+
+        font-weight: 700;
+
+        margin: 5px;
+
+        background: #fbbf24;
+
+        color: #713f12;
+    }
+
+    .home-btn {
+        border: none;
+
+        border-radius: 11px;
+
+        padding: 11px 20px;
+
+        font-weight: 700;
+
+        margin: 5px;
+
+        background: #dcfce7;
+
+        color: #166534;
+    }
+
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 768px) {
+
+        .result-hero {
+            padding: 28px 22px;
+        }
+
+        .result-hero h1 {
+            font-size: 34px;
+        }
+
+        .result-visual {
+            margin-top: 20px;
+        }
+
+        .result-card {
+            padding: 22px 16px;
+        }
+
+    }
+
+</style>
+
+
+<div class="result-page">
+
+
+    <!-- ================= HERO ================= -->
+
+    <div class="result-hero">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-7">
+
+                <div class="badge bg-primary mb-3 px-3 py-2">
+                    🎯 Quiz Completed
+                </div>
+
+                <h1>
+                    Your Quiz
+                    <span>Result</span>
+                </h1>
+
+                <p>
+                    Great job completing the quiz!
+                    Check your score, percentage and performance below.
+                </p>
+
+            </div>
+
+
+            <div class="col-lg-5">
+
+                <div class="result-visual">
+
+                    <div class="trophy-circle">
+                        🏆
+                    </div>
+
+                    <div class="floating-star">
+                        ⭐
+                    </div>
+
+                    <div class="floating-medal">
+                        🥇
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= RESULT CARD ================= -->
+
+    <div class="result-card text-center">
+
+        <div class="student-name">
+            👤 {{ student_name }}
+        </div>
+
+        <div class="subject-name mt-1">
+            📚 {{ subject }}
+        </div>
+
+
+        <!-- SCORE -->
+
+        <div class="score-box">
+
+            <strong>
+                {{ score }}/{{ total }}
+            </strong>
+
+            <small>
+                Quiz Score
+            </small>
+
+        </div>
+
+
+        <!-- DETAILS -->
+
+        <div class="row g-4 mt-2">
+
+
+            <div class="col-md-4">
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+                        📊
+                    </div>
+
+                    <small>
+                        Percentage
+                    </small>
+
+                    <h4>
+                        {{ "%.2f"|format(percentage) }}%
+                    </h4>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+                        🏅
+                    </div>
+
+                    <small>
+                        Grade
+                    </small>
+
+                    <div class="grade-box">
+                        {{ grade }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+                        🎯
+                    </div>
+
+                    <small>
+                        Performance
+                    </small>
+
+                    <h4>
+
+                        {% if percentage >= 80 %}
+                            Excellent
+                        {% elif percentage >= 50 %}
+                            Good
+                        {% else %}
+                            Keep Practicing
+                        {% endif %}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================= PASS / FAIL ================= -->
+
+        {% if percentage >= 50 %}
+
+        <div class="alert alert-success mt-4 mb-0">
+            🎉 <strong>Congratulations!</strong>
+            You Passed the Quiz.
+        </div>
+
+        {% else %}
+
+        <div class="alert alert-danger mt-4 mb-0">
+            😔 Better Luck Next Time!
+            Keep practicing and try again.
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================= STUDY TIPS ================= -->
+
+        <div class="custom-card text-start">
+
+            <div class="custom-header">
+                💡 Study Tips
+            </div>
+
+            <div class="custom-body">
+
+                {% if percentage >= 80 %}
+
+                <p class="mb-0">
+                    Excellent work! You have demonstrated a strong
+                    understanding of the subject. Continue practicing
+                    regularly and challenge yourself with more advanced
+                    questions to strengthen your knowledge and maintain
+                    your excellent performance.
+                </p>
+
+                {% elif percentage >= 50 %}
+
+                <p class="mb-0">
+                    Good effort! You have understood the basic concepts,
+                    but there is still room for improvement. Revise the
+                    important topics, practice more MCQs, and attempt
+                    the quiz again to achieve an even better score.
+                </p>
+
+                {% else %}
+
+                <p class="mb-0">
+                    Don't be discouraged by your score. Every attempt
+                    is an opportunity to learn. Review the chapter
+                    carefully, understand the key concepts, and practice
+                    regularly. With consistent effort, you can achieve
+                    better results in your next attempt.
+                </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RESOURCES ================= -->
+
+        <div class="custom-card text-start">
+
+            <div class="resource-header">
+                📚 Recommended Resources
+            </div>
+
+            <div class="custom-body">
+
+                {% if subject == "Python" %}
+
+                <p class="mb-0">
+                    Revise Python basics, loops, functions, lists and
+                    dictionaries. Practice small coding programs and
+                    solve additional MCQs.
+                </p>
+
+                {% elif subject == "Java" %}
+
+                <p class="mb-0">
+                    Focus on classes, objects, inheritance and
+                    polymorphism. Practice Java programs to strengthen
+                    your concepts.
+                </p>
+
+                {% elif subject == "C" %}
+
+                <p class="mb-0">
+                    Revise variables, loops, functions and arrays.
+                    Practice simple C programs regularly.
+                </p>
+
+                {% elif subject == "C++" %}
+
+                <p class="mb-0">
+                    Study OOP concepts, constructors, inheritance and
+                    STL basics. Practice coding exercises daily.
+                </p>
+
+                {% elif subject == "JavaScript" %}
+
+                <p class="mb-0">
+                    Revise variables, functions, DOM manipulation and
+                    events. Build small interactive web pages for
+                    practice.
+                </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= BUTTONS ================= -->
+
+        <div class="mt-4">
+
+            <a
+                href="{{ url_for('subjects') }}"
+                class="btn result-btn">
+
+                🔄 Take Another Quiz
+
+            </a>
+
+
+            <a
+                href="{{ url_for('leaderboard') }}"
+                class="btn leader-btn">
+
+                🏆 View Leaderboard
+
+            </a>
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="btn home-btn">
+
+                🏠 Home
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}
