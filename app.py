@@ -3696,9 +3696,11 @@ NOTES = {
     }
 }
 app.secret_key = "student_quiz_hub"
+
 def init_db():
     conn = get_db()
 
+    # Quiz Records Table
     conn.execute("""
     CREATE TABLE IF NOT EXISTS quiz_records (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -3707,6 +3709,18 @@ def init_db():
         score INTEGER NOT NULL,
         attempts INTEGER NOT NULL,
         status TEXT
+    )
+    """)
+
+    # Students Table
+    conn.execute("""
+    CREATE TABLE IF NOT EXISTS students (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        students_name TEXT NOT NULL,
+        marks INTEGER,
+        roll TEXT,
+        subject TEXT,
+        attendance INTEGER
     )
     """)
 
@@ -3772,27 +3786,33 @@ def admin_login():
 @app.route("/students")
 def students():
 
-    conn = get_db()
+    search = request.args.get("search", "")
 
-    search = request.args.get("search")
+    conn = get_db()
 
     if search:
         students = conn.execute(
-            "SELECT * FROM quiz_records WHERE name LIKE ?",
+            """
+            SELECT * FROM quiz_records
+            WHERE name LIKE ?
+            ORDER BY id DESC
+            """,
             ('%' + search + '%',)
         ).fetchall()
+
     else:
         students = conn.execute(
-            "SELECT * FROM quiz_records"
+            """
+            SELECT * FROM quiz_records
+            ORDER BY id DESC
+            """
         ).fetchall()
 
     conn.close()
 
     return render_template(
         "students.html",
-        students=students,
-        total_students=len(students),
-        get_status=get_status
+        students=students
     )
 # ---------------- ADD STUDENT ----------------
 @app.route("/add_students", methods=["GET", "POST"])
@@ -3881,92 +3901,173 @@ def quiz(subject):
 @app.route("/result", methods=["POST"])
 def result():
 
-    student_id = request.form["student_id"]
-    student_name = request.form["student_name"]
-    subject = request.form["subject"]
+    # ================= STUDENT DETAILS =================
 
-    questions = QUIZZES.get(subject)
+    student_id = request.form.get("student_id", "")
+    student_name = request.form.get("student_name", "")
+    subject = request.form.get("subject", "")
+
+
+    # ================= GET QUESTIONS =================
+
+    questions = QUIZZES.get(subject, [])
+
+
+    # ================= CALCULATE SCORE =================
 
     score = 0
 
     for i, q in enumerate(questions):
-        answer = request.form.get(f"q{i}")
 
-        if answer == q["answer"]:
+        user_answer = request.form.get(f"q{i}")
+
+        if user_answer == q["answer"]:
             score += 1
 
-    total = len(questions)
-    percentage = (score / total) * 100
+
+    # ================= TOTAL QUESTIONS =================
+
+    total_questions = len(questions)
+
+
+    # ================= PERCENTAGE =================
+
+    if total_questions > 0:
+
+        percentage = round(
+            (score / total_questions) * 100,
+            2
+        )
+
+    else:
+
+        percentage = 0
+
+
+    # ================= PASS / FAIL =================
+
+    if percentage >= 50:
+
+        status = "Pass"
+
+    else:
+
+        status = "Fail"
+
+
+    # ================= GRADE =================
 
     if percentage >= 90:
+
         grade = "A+"
+
     elif percentage >= 80:
+
         grade = "A"
+
     elif percentage >= 70:
-        grade = "B"
+
+        grade = "B+"
+
     elif percentage >= 60:
-        grade = "C"
+
+        grade = "B"
+
     elif percentage >= 50:
-        grade = "D"
+
+        grade = "C"
+
     else:
+
         grade = "F"
 
-    status = "Pass" if score >= 5 else "Fail"
+
+    # ================= DATABASE =================
 
     conn = get_db()
 
+
+    # Check existing student + subject
+
     existing = conn.execute(
-        "SELECT * FROM quiz_records WHERE name=?",
-        (student_name,)
+        """
+        SELECT * FROM quiz_records
+        WHERE name=? AND subject=?
+        """,
+        (student_name, subject)
     ).fetchone()
+
 
     if existing:
 
+        # Increase attempts
+
         attempts = existing["attempts"] + 1
 
-        # Highest score कायम ठेव
-        best_score = max(existing["score"], score)
-
-        status = "Pass" if best_score >= 5 else "Fail"
-
-        conn.execute("""
+        conn.execute(
+            """
             UPDATE quiz_records
-            SET subject=?, score=?, attempts=?, status=?
-            WHERE name=?
-        """, (
-            subject,
-            best_score,
-            attempts,
-            status,
-            student_name
-        ))
+
+            SET score=?,
+                attempts=?,
+                status=?
+
+            WHERE name=? AND subject=?
+            """,
+            (
+                score,
+                attempts,
+                status,
+                student_name,
+                subject
+            )
+        )
+
 
     else:
 
-        attempts = 1
+        # New student + subject record
 
-        conn.execute("""
+        conn.execute(
+            """
             INSERT INTO quiz_records
             (name, subject, score, attempts, status)
+
             VALUES (?, ?, ?, ?, ?)
-        """, (
-            student_name,
-            subject,
-            score,
-            attempts,
-            status
-        ))
+            """,
+            (
+                student_name,
+                subject,
+                score,
+                1,
+                status
+            )
+        )
+
 
     conn.commit()
     conn.close()
 
+
+    # ================= RESULT PAGE =================
+
     return render_template(
         "result.html",
+
+        student_id=student_id,
+
         student_name=student_name,
+
         subject=subject,
+
         score=score,
-        total=total,
+
+        total_questions=total_questions,
+
         percentage=percentage,
+
+        status=status,
+
         grade=grade
     )
 #-----------------leaderboard----------------
@@ -4116,8 +4217,40 @@ def edit_student(id):
         "Edit_student.html",
         student=student
     )
+#------------Delete-----------------------
+@app.route("/delete_student/<int:id>")
+def delete_student(id):
 
+    # Admin login check
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin_login"))
+
+    conn = get_db()
+
+    conn.execute(
+        "DELETE FROM students WHERE id = ?",
+        (id,)
+    )
+
+    conn.commit()
+    conn.close()
+
+    flash("Student deleted successfully!", "success")
+
+    return redirect(url_for("students"))
+#-----------clear_old_leaderboard------------
+@app.route("/clear_old_leaderboard")
+def clear_old_leaderboard():
+    conn = get_db()
+    conn.execute(
+        "DELETE FROM quiz_records WHERE name != ?",
+        ("Mohini",)
+    )
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("leaderboard"))
 # ---------------- MAIN ----------------
-init_db()
 if __name__ == "__main__":
+    init_db()
     app.run(debug=True)
