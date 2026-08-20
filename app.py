@@ -11,10 +11,11 @@ os.environ["PYTHONUTF8"] = "1"
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 import sqlite3
-import ollama
+from google import genai
 
 app = Flask(__name__)
 
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 QUIZZES = {
 
     "Python": [
@@ -4151,21 +4152,14 @@ def ai_chatbox():
         if user_message:
 
             try:
-
-                response = ollama.chat(
-                    model="llama3.2",
-                    messages=[
-                        {
-                            "role": "user",
-                            "content": user_message
-                        }
-                    ]
+                response = client.models.generate_content(
+                    model="gemini-3.6-flash",
+                    contents=user_message
                 )
 
-                answer = response["message"]["content"]
+                answer = response.text
 
             except Exception as e:
-
                 answer = "AI Error: " + str(e)
 
     return render_template(
@@ -4173,7 +4167,6 @@ def ai_chatbox():
         answer=answer,
         user_message=user_message
     )
-
 # ---------------- EDIT ----------------
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit_student(id):
